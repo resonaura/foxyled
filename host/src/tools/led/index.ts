@@ -48,6 +48,7 @@ export class LEDTools {
 
     for (let i = 0; i < numLeds; i++) {
       const offset = i * 3;
+
       colorData[offset] = stabilizedColor.r;
       colorData[offset + 1] = stabilizedColor.g;
       colorData[offset + 2] = stabilizedColor.b;
