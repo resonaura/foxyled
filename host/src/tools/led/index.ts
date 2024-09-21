@@ -59,10 +59,12 @@ export class LEDTools {
     const colorData: Buffer = Buffer.alloc(colors.length * 3);
 
     colors.forEach((color, index) => {
+      const stabilizedColor = LEDTools.applyBrightnessToColor(color, 50);
+
       const offset = index * 3;
-      colorData[offset] = color.r;
-      colorData[offset + 1] = color.g;
-      colorData[offset + 2] = color.b;
+      colorData[offset] = stabilizedColor.r;
+      colorData[offset + 1] = stabilizedColor.g;
+      colorData[offset + 2] = stabilizedColor.b;
     });
 
     return colorData;
