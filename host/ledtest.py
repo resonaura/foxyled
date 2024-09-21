@@ -14,7 +14,7 @@ def create_white_dot(num_leds, dot_position):
             g, r, b = 255, 255, 255
         else:
             # Черный цвет (светодиоды выключены)
-            g, r, b = 200, 255, 255
+            g, r, b = 255, 255, 255
         
         # Добавляем GRB значения для каждого светодиода
         color_data += bytearray([g, r, b])
