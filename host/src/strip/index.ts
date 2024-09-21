@@ -18,7 +18,7 @@ export class LEDStrip {
 
     setInterval(() => {
       if (this.io.isReady() && !this.busy) this.refresh();
-    }, 1000);
+    }, 100);
   }
 
   constructor(port: string, numLeds: number) {
