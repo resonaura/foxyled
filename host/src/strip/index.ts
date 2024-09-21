@@ -18,7 +18,7 @@ export class LEDStrip {
 
     setInterval(() => {
       if (this.io.isReady() && !this.busy) this.refresh();
-    }, 100);
+    }, 500);
   }
 
   constructor(port: string, numLeds: number) {
@@ -41,7 +41,7 @@ export class LEDStrip {
 
   async smoothFillWithColor(color: ColorRGB): Promise<void> {
     while (this.busy) {
-      await Timer.sleep(0.05);
+      await Timer.sleep(0.5);
     }
 
     this.busy = true;
