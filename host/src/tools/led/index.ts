@@ -43,15 +43,14 @@ export class LEDTools {
     color: ColorRGB,
     numLeds: number
   ): Buffer {
-    const stabilizedColor = LEDTools.applyBrightnessToColor(color, 30);
     const colorData: Buffer = Buffer.alloc(numLeds * 3);
 
     for (let i = 0; i < numLeds; i++) {
       const offset = i * 3;
 
-      colorData[offset] = stabilizedColor.r;
-      colorData[offset + 1] = stabilizedColor.g;
-      colorData[offset + 2] = stabilizedColor.b;
+      colorData[offset] = color.r;
+      colorData[offset + 1] = color.g;
+      colorData[offset + 2] = color.b;
     }
     return colorData;
   }
