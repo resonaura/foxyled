@@ -16,7 +16,7 @@ export class CacheTools {
 
       const state = JSON.parse(data);
       console.log(`🔮 Last state loaded`);
-      console.log(JSON.stringify(data, null, 2));
+      console.log(data);
 
       return state;
     } catch (err) {
