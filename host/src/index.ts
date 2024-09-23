@@ -1,6 +1,6 @@
 import { SinricPro, startSinricPro } from 'sinricpro';
 import { LEDTools } from './tools/led';
-import { ColorRGB } from './interfaces';
+import { AppState, ColorRGB } from './interfaces';
 import * as dotenv from 'dotenv';
 import { LEDStrip } from './strip';
 import { CacheTools } from './tools/cache';
@@ -24,13 +24,22 @@ const strip = new LEDStrip(
 );
 const wss = new WebSocketServer({ port: wsPort });
 
-let lastColor: ColorRGB = CacheTools.loadLastColor() ?? {
-  r: 255,
-  g: 255,
-  b: 255
-}; // Default color
+let state = CacheTools.loadState() ?? {
+  color: {
+    r: 255,
+    g: 255,
+    b: 255
+  },
+  brightness: 100,
+  on: true
+};
 
-let brightness: number = 100;
+const setState = (newState: AppState) => {
+  state = newState;
+
+  CacheTools.saveState(newState);
+};
+
 let connectedClient: WebSocket | null = null;
 let externalMode = false;
 
@@ -68,10 +77,12 @@ wss.on('connection', function connection(ws) {
 const setPowerState = async (_deviceid: string, data: any) => {
   console.log('💡 Power state: ', data);
   if (data === 'Off') {
+    setState({ ...state, on: false });
     await strip.smoothFillWithColor({ r: 0, g: 0, b: 0 });
   } else if (data === 'On') {
+    setState({ ...state, on: true });
     await strip.smoothFillWithColor(
-      LEDTools.applyBrightnessToColor(lastColor, brightness)
+      LEDTools.applyBrightnessToColor(state.color, state.brightness)
     );
   }
   return true;
@@ -86,10 +97,9 @@ const setColor = async (_deviceid: string, data: any) => {
 
   console.log('🎨 Color data received: ', newColor);
 
-  if (JSON.stringify(newColor) !== JSON.stringify(lastColor)) {
+  if (JSON.stringify(newColor) !== JSON.stringify(state.color)) {
     await strip.smoothFillWithColor(newColor);
-    lastColor = newColor;
-    CacheTools.saveLastColor(lastColor); // Save the color when it changes
+    setState({ ...state, color: newColor });
   }
 
   return true;
@@ -98,11 +108,13 @@ const setColor = async (_deviceid: string, data: any) => {
 const setBrightness = async (_deviceid: string, newBrightness: any) => {
   console.log('🔆 Brightness: ', `${newBrightness}%`);
 
-  brightness = newBrightness;
+  setState({ ...state, brightness: newBrightness });
 
-  await strip.smoothFillWithColor(
-    LEDTools.applyBrightnessToColor(lastColor, newBrightness)
-  );
+  if (state.on) {
+    await strip.smoothFillWithColor(
+      LEDTools.applyBrightnessToColor(state.color, newBrightness)
+    );
+  }
 
   return true;
 };
@@ -113,8 +125,7 @@ const setColorTemperature = async (_deviceid: string, data: any) => {
   const color = LEDTools.kelvinToRGB(data);
   await strip.smoothFillWithColor(color);
 
-  lastColor = color;
-  CacheTools.saveLastColor(lastColor); // Save the color when it changes
+  setState({ ...state, color });
 
   return true;
 };

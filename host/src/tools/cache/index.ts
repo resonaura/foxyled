@@ -1,6 +1,6 @@
 import * as fs from 'fs';
 import * as path from 'path';
-import { ColorRGB } from '../../interfaces';
+import { ColorRGB, AppState } from '../../interfaces';
 
 export class CacheTools {
   // Method to get cache file path
@@ -9,25 +9,24 @@ export class CacheTools {
   }
 
   // Load the last color from file at startup
-  static loadLastColor(): ColorRGB | null {
+  static loadState(): AppState | null {
     try {
       const path = this.getCacheFilePath();
       const data = fs.readFileSync(path, 'utf8');
 
-      const lastColor = JSON.parse(data);
-      console.log(`🔮 Last color loaded: ${JSON.stringify(lastColor)}`);
+      const state = JSON.parse(data);
+      console.log(`🔮 Last state loaded`);
 
-      return lastColor;
+      return state;
     } catch (err) {
-      console.log('🛑 No last color found, using default.');
       return null;
     }
   }
 
   // Save the last color to file
-  static saveLastColor(color: ColorRGB) {
+  static saveState(state: AppState) {
     const path = this.getCacheFilePath();
-    fs.writeFileSync(path, JSON.stringify(color));
-    console.log(`💾 Last color saved: ${JSON.stringify(color)}`);
+    fs.writeFileSync(path, JSON.stringify(state));
+    console.log(`💾 State saved`);
   }
 }
