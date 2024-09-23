@@ -1,7 +1,7 @@
-import { ColorRGB } from "../interfaces";
-import { LEDTools } from "../tools/led";
-import { Timer } from "../tools/timer";
-import { StripIO } from "./io";
+import { ColorRGB } from '../interfaces';
+import { LEDTools } from '../tools/led';
+import { Timer } from '../tools/timer';
+import { StripIO } from './io';
 
 export class LEDStrip {
   private io: StripIO;

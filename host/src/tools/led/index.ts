@@ -1,5 +1,5 @@
-import { ColorRGB } from "../../interfaces";
-import { Timer } from "../timer";
+import { ColorRGB } from '../../interfaces';
+import { Timer } from '../timer';
 
 export class LEDTools {
   static kelvinToRGB(kelvin: number): ColorRGB {
@@ -35,7 +35,7 @@ export class LEDTools {
     return {
       r: this.clamp(color.r),
       g: this.clamp(color.g),
-      b: this.clamp(color.b),
+      b: this.clamp(color.b)
     };
   }
 
@@ -69,7 +69,7 @@ export class LEDTools {
   }
 
   static prepareData(data: Buffer): Buffer {
-    const header = Buffer.from("Ada\x00\x00\x36", "ascii");
+    const header = Buffer.from('Ada\x00\x00\x36', 'ascii');
     return Buffer.concat([header, data]);
   }
 
@@ -91,7 +91,7 @@ export class LEDTools {
     let lastStepColor = {
       r: this.clamp(current.r),
       g: this.clamp(current.g),
-      b: this.clamp(current.b),
+      b: this.clamp(current.b)
     };
 
     for (let i = 0; i < steps; i++) {
@@ -120,20 +120,20 @@ export class LEDTools {
     const deltas = currents.map((current, index) => ({
       deltaR: (targets[index].r - current.r) / steps,
       deltaG: (targets[index].g - current.g) / steps,
-      deltaB: (targets[index].b - current.b) / steps,
+      deltaB: (targets[index].b - current.b) / steps
     }));
 
     let lastStepColors = currents.map((current) => ({
       r: this.clamp(current.r),
       g: this.clamp(current.g),
-      b: this.clamp(current.b),
+      b: this.clamp(current.b)
     }));
 
     for (let i = 0; i < steps; i++) {
       lastStepColors = lastStepColors.map((color, index) => ({
         r: this.clamp(color.r + deltas[index].deltaR),
         g: this.clamp(color.g + deltas[index].deltaG),
-        b: this.clamp(color.b + deltas[index].deltaB),
+        b: this.clamp(color.b + deltas[index].deltaB)
       }));
 
       await onStep(lastStepColors, i, steps - (i + 1));
@@ -143,7 +143,7 @@ export class LEDTools {
     return targets.map((target) => ({
       r: target.r,
       g: target.g,
-      b: target.b,
+      b: target.b
     }));
   }
 
@@ -157,7 +157,7 @@ export class LEDTools {
     return {
       r: color.r * adjustedBrightness,
       g: color.g * adjustedBrightness,
-      b: color.b * adjustedBrightness,
+      b: color.b * adjustedBrightness
     };
   }
 }

@@ -1,4 +1,4 @@
-declare module "sinricpro";
+declare module 'sinricpro';
 
 // Define a type for the expected structure of the process.env object with LED Strip and Sinric Pro configurations
 type EnvironmentVariables = {

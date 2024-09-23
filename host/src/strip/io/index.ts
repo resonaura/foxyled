@@ -1,6 +1,6 @@
-import { SerialPort } from "serialport";
-import { Timer } from "../../tools/timer";
-import { LEDTools } from "../../tools/led";
+import { SerialPort } from 'serialport';
+import { Timer } from '../../tools/timer';
+import { LEDTools } from '../../tools/led';
 
 export class StripIO {
   private portPath: string;
@@ -11,7 +11,7 @@ export class StripIO {
 
   constructor(portPath?: string) {
     if (!portPath) {
-      throw new Error("Port path it required.");
+      throw new Error('Port path it required.');
     }
 
     this.portPath = portPath;
@@ -23,7 +23,7 @@ export class StripIO {
       const foundPort = ports.find((p) => p.path === this.portPath);
 
       if (!foundPort) {
-        console.log("🚫 Device not found. Retrying...");
+        console.log('🚫 Device not found. Retrying...');
         await Timer.sleep(5); // Wait and retry
         return this.checkSerialDevice(); // Keep looking for the device
       }
@@ -31,14 +31,14 @@ export class StripIO {
       console.log(`🔌 Device found at ${foundPort.path}`);
       return foundPort.path;
     } catch (error) {
-      console.log("🛑 Error finding device:", error);
+      console.log('🛑 Error finding device:', error);
       await Timer.sleep(5); // Wait before retrying in case of error
       return this.checkSerialDevice();
     }
   }
 
   private async recreatePort() {
-    console.log("🔄 Recreating the serial port...");
+    console.log('🔄 Recreating the serial port...');
     if (this.port) {
       this.port.removeAllListeners(); // Ensure all listeners are removed before recreating
       this.port = null;
@@ -51,13 +51,13 @@ export class StripIO {
       this.portOpening = true;
       try {
         this.port?.open();
-        this.port?.on("open", () => {
-          console.log("🔌 Port opened successfully.");
+        this.port?.on('open', () => {
+          console.log('🔌 Port opened successfully.');
           this.portOpening = false;
           this.ready = true;
         });
       } catch (err: any) {
-        console.error("🚫 Failed to open port:", err.message);
+        console.error('🚫 Failed to open port:', err.message);
         this.portOpening = false;
         this.ready = false;
         await Timer.sleep(5); // Wait before retrying
@@ -79,17 +79,17 @@ export class StripIO {
     this.port = new SerialPort({
       path: devicePath,
       baudRate: 115200,
-      autoOpen: false,
+      autoOpen: false
     });
 
-    this.port.on("error", (err) => {
-      console.error("🛑 Port error:", err.message);
+    this.port.on('error', (err) => {
+      console.error('🛑 Port error:', err.message);
       this.ready = false;
       this.recreatePort(); // Recreate the port on error
     });
 
-    this.port.on("close", () => {
-      console.log("🔌 Port closed. Attempting to reconnect...");
+    this.port.on('close', () => {
+      console.log('🔌 Port closed. Attempting to reconnect...');
       this.ready = false;
       this.recreatePort(); // Recreate the port when closed
     });
@@ -103,19 +103,19 @@ export class StripIO {
 
   async write(data: Buffer): Promise<void> {
     if (!this.ready) {
-      throw new Error("Port is not ready");
+      throw new Error('Port is not ready');
     }
 
     try {
       this?.port?.write(data, (error) => {
         if (error) {
-          console.log("🛑 Error on write:", error.message);
+          console.log('🛑 Error on write:', error.message);
           this.ready = false; // Mark the port as closed on error
           this.recreatePort(); // Recreate port on write error
         }
       });
     } catch (e) {
-      console.error("🛑 Error during write:", e);
+      console.error('🛑 Error during write:', e);
       this.ready = false; // Mark the port as closed on error
       this.recreatePort(); // Recreate port on write error
     }
