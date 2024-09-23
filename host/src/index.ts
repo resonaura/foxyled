@@ -159,10 +159,6 @@ strip.init();
 async function checkInternetConnection() {
   try {
     const res = await ping.promise.probe('google.com');
-    if (!res.alive) {
-      console.error('🛑 No internet connection. Exiting...');
-      process.exit(1); // Exit if no internet
-    }
   } catch (err) {
     console.error('🛑 No internet connection. Exiting...');
     process.exit(1); // Exit if no internet
