@@ -16,6 +16,7 @@ export class CacheTools {
 
       const state = JSON.parse(data);
       console.log(`🔮 Last state loaded`);
+      console.log(JSON.stringify(data, null, 2));
 
       return state;
     } catch (err) {
@@ -26,6 +27,6 @@ export class CacheTools {
   // Save the last color to file
   static saveState(state: AppState) {
     const path = this.getCacheFilePath();
-    fs.writeFileSync(path, JSON.stringify(state));
+    fs.writeFileSync(path, JSON.stringify(state, null, 2));
   }
 }
