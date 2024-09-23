@@ -28,6 +28,7 @@ export class LEDStrip {
   }
 
   private async sendMatrixToIO(matrix: ColorRGB[]): Promise<void> {
+    console.log(matrix);
     // If the port is not open, don't attempt to write
     if (!this.io.isReady()) {
       return; // Exit and wait for the connection to re-establish
