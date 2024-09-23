@@ -27,6 +27,5 @@ export class CacheTools {
   static saveState(state: AppState) {
     const path = this.getCacheFilePath();
     fs.writeFileSync(path, JSON.stringify(state));
-    console.log(`💾 State saved`);
   }
 }
