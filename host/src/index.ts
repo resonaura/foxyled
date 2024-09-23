@@ -98,7 +98,10 @@ const setColor = async (_deviceid: string, data: any) => {
   console.log('🎨 Color data received: ', newColor);
 
   if (JSON.stringify(newColor) !== JSON.stringify(state.color)) {
-    await strip.smoothFillWithColor(newColor);
+    if (state.on) {
+      await strip.smoothFillWithColor(newColor);
+    }
+
     setState({ ...state, color: newColor });
   }
 
