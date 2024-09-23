@@ -64,10 +64,6 @@ sudo systemctl enable $SERVICE_NAME
 echo "Starting $SERVICE_NAME service..."
 sudo systemctl start $SERVICE_NAME
 
-# Check the service status
-echo "Checking status of $SERVICE_NAME service..."
-sudo systemctl status $SERVICE_NAME
-
 # Adding aliases to .bashrc
 echo "Adding aliases for foxy-start, foxy-stop, foxy-reboot, and foxy..."
 
