@@ -123,7 +123,10 @@ const setColorTemperature = async (_deviceid: string, data: any) => {
   console.log('🌡️  Color temperature: ', `${data}K`);
 
   const color = LEDTools.kelvinToRGB(data);
-  await strip.smoothFillWithColor(color);
+
+  if (state.on) {
+    await strip.smoothFillWithColor(color);
+  }
 
   setState({ ...state, color });
 
